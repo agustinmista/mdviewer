@@ -1,0 +1,220 @@
+<!DOCTYPE HTML>
+<html><head><style type="text/css">
+
+pre,
+code {
+  font-family: Menlo, Monaco, "Courier New", monospace;
+}
+
+pre {
+  padding: .5rem;
+  line-height: 1.25;
+  overflow-x: scroll;
+}
+
+@media print {
+  *,
+  *:before,
+  *:after {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+
+  a[href]:after {
+    content: " (" attr(href) ")";
+  }
+
+  abbr[title]:after {
+    content: " (" attr(title) ")";
+  }
+
+  a[href^="#"]:after,
+  a[href^="javascript:"]:after {
+    content: "";
+  }
+
+  pre,
+  blockquote {
+    border: 1px solid #999;
+    page-break-inside: avoid;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+
+  img {
+    max-width: 100% !important;
+  }
+
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+}
+
+a,
+a:visited {
+  color: #01ff70;
+}
+
+a:hover,
+a:focus,
+a:active {
+  color: #2ecc40;
+}
+
+.retro-no-decoration {
+  text-decoration: none;
+}
+
+html {
+  font-size: 12px;
+}
+
+@media screen and (min-width: 32rem) and (max-width: 48rem) {
+  html {
+    font-size: 15px;
+  }
+}
+
+@media screen and (min-width: 48rem) {
+  html {
+    font-size: 16px;
+  }
+}
+
+body {
+  line-height: 1.85;
+}
+
+p,
+.retro-p {
+  font-size: 1rem;
+  margin-bottom: 1.3rem;
+}
+
+h1,
+.retro-h1,
+h2,
+.retro-h2,
+h3,
+.retro-h3,
+h4,
+.retro-h4 {
+  margin: 1.414rem 0 .5rem;
+  font-weight: inherit;
+  line-height: 1.42;
+}
+
+h1,
+.retro-h1 {
+  margin-top: 0;
+  font-size: 3.998rem;
+}
+
+h2,
+.retro-h2 {
+  font-size: 2.827rem;
+}
+
+h3,
+.retro-h3 {
+  font-size: 1.999rem;
+}
+
+h4,
+.retro-h4 {
+  font-size: 1.414rem;
+}
+
+h5,
+.retro-h5 {
+  font-size: 1.121rem;
+}
+
+h6,
+.retro-h6 {
+  font-size: .88rem;
+}
+
+small,
+.retro-small {
+  font-size: .707em;
+}
+
+/* https://github.com/mrmrs/fluidity */
+
+img,
+canvas,
+iframe,
+video,
+svg,
+select,
+textarea {
+  max-width: 100%;
+}
+
+html,
+body {
+  background-color: #222;
+  min-height: 100%;
+}
+
+html {
+  font-size: 18px;
+}
+
+body {
+  color: #fafafa;
+  font-family: "Courier New";
+  line-height: 1.45;
+  margin: 6rem auto 1rem;
+  max-width: 48rem;
+  padding: .25rem;
+}
+
+pre {
+  background-color: #333;
+}
+
+blockquote {
+  border-left: 3px solid #01ff70;
+  padding-left: 1rem;
+}</style></head><body><h1>An exhibit of Markdown</h1><p>This note demonstrates some of what <a href="http://daringfireball.net/projects/markdown/">Markdown</a> is capable of doing.</p><p><i>Note: Feel free to play with this page. Unlike regular notes, this doesn't
+automatically save itself.</i></p><h2>Basic formatting</h2><p>Paragraphs can be written like so. A paragraph is the basic block of Markdown.
+A paragraph is what text will turn into when there is no reason it should
+become anything else.</p><p>Paragraphs must be separated by a blank line. Basic formatting of <i>italics</i> and
+<b>bold</b> is supported. This <i>can be nested like</i> so.</p><h2>Lists</h2><h3>Ordered list</h3><ol><li>Item 1</li><li>A second item</li><li>Number 3</li><li>Ⅳ</li></ol><p><i>Note: the fourth item uses the Unicode character for <a href="http://www.fileformat.info/info/unicode/char/2163/index.htm">Roman numeral four</a>.</i></p><h3>Unordered list</h3><ul><li>An item</li><li>Another item</li><li>Yet another item</li><li>And there's more...</li></ul><h2>Paragraph modifiers</h2><h3>Code block</h3><pre><code>Code blocks are very useful for developers and other people who look at
+code or other things that are written in plain text. As you can see, it
+uses a fixed-width font.</code></pre><p>You can also make <code>inline code</code> to add code into other things.</p><h3>Quote</h3><blockquote><p>Here is a quote. What this is should be self explanatory. Quotes are
+automatically indented when they are used.</p></blockquote><h2>Headings</h2><p>There are six levels of headings. They correspond with the six levels of HTML
+headings. You've probably noticed them already in the page. Each level down
+uses one more hash character.</p><h3>Headings <i>can</i> also contain <b>formatting</b></h3><h3>They can even contain <code>inline code</code></h3><p>Of course, demonstrating what headings look like messes up the structure of the
+page.</p><p>I don't recommend using more than three or four levels of headings here,
+because, when you're smallest heading isn't too small, and you're largest
+heading isn't too big, and you want each size up to look noticeably larger and
+more important, there there are only so many sizes that you can use.</p><h2>URLs</h2><p>URLs can be made in a handful of ways:</p><ul><li>A named link to <a href="http://www.markitdown.net/">MarkItDown</a>. The easiest way to do these is to select
+what you want to make a link and hit <code>Ctrl+L</code>.</li><li>Another named link to <a href="http://www.markitdown.net/">MarkItDown</a></li><li>Sometimes you just want a URL like <a href="http://www.markitdown.net/">http://www.markitdown.net/</a>.</li></ul><h2>Horizontal rule</h2><p>A horizontal rule is a line that goes across the middle of the page.</p><hr><p>It's sometimes handy for breaking things up.</p><h2>Images</h2><p>Markdown can also contain images. I'll need to add something here sometime.</p><h2>Finally</h2><p>There's actually a lot more to Markdown than this. See the official
+<a href="http://daringfireball.net/projects/markdown/basics">introduction</a> and <a href="http://daringfireball.net/projects/markdown/syntax">syntax</a> for more information. However, be aware that
+this is not using the official implementation, and this might work subtly
+differently in some of the little things.</p></body></html>

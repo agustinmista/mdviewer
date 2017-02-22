@@ -1,0 +1,13 @@
+flags: {}
+
+extra-package-dbs: []
+
+packages:
+- location: https://github.com/agustinmista/ArgParser/archive/master.zip
+  extra-dep: true
+- '.'
+
+extra-deps:
+- cond-0.4.1.1 
+
+resolver: lts-8.0
