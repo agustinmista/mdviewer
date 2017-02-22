@@ -4,15 +4,17 @@ module Show (runShow) where
 
 import Prelude hiding (writeFile)
 
+import Control.Exception
 import Control.Concurrent
-import Control.Monad
-import Control.Monad.IO.Class
 import Control.Conditional
+import Control.Monad (void) 
+import Control.Monad.IO.Class
 
 import Graphics.UI.Gtk 
 import Graphics.UI.Gtk.WebKit.WebView
 import Graphics.UI.Gtk.Windows.Window
 import System.Glib.UTFString
+import System.FilePath
 import System.Exit
 
 import Data.Maybe
@@ -26,13 +28,19 @@ import Types
 import HtmlBuilder
 
 
-nextStyleFrom :: Command -> Styles -> Command
-nextStyleFrom cmd styles = cmd { style = nextStyle }
+offsetStyleFrom :: Int -> Command -> Styles -> Command
+offsetStyleFrom offset cmd styles = cmd { style = offsetStyle }
     where stylesQueue = Nothing : map Just (listStyles styles)
           currIndex = fromJust $ elemIndex (style cmd) stylesQueue
-          nextIndex = (currIndex + 1) `mod` (length stylesQueue - 1) 
-          nextStyle = stylesQueue !! nextIndex
-    
+          offsetIndex = (currIndex + offset) `mod` (length stylesQueue - 1) 
+          offsetStyle = stylesQueue !! offsetIndex
+
+nextStyleFrom :: Command -> Styles -> Command
+nextStyleFrom = offsetStyleFrom 1
+
+prevStyleFrom :: Command -> Styles -> Command
+prevStyleFrom = offsetStyleFrom (-1)
+
 
 setInputFile :: Command -> FilePath -> Command
 setInputFile cmd path = cmd { input = path } 
@@ -61,6 +69,7 @@ genericDialogNew action window = fileChooserDialogNew
 saveDialogNew, openDialogNew :: Window -> IO FileChooserDialog
 saveDialogNew = genericDialogNew "Save"
 openDialogNew = genericDialogNew "Open"
+
 
 whenReturnFilename :: FileChooserDialog -> (FilePath -> IO ()) -> IO ()
 whenReturnFilename dialog action = do 
@@ -139,15 +148,28 @@ runShow cmd styles = do
                 let cmd' = cmd `nextStyleFrom` styles 
                 return (cmd', cmd')
             window `set` [ windowTitle := makeTitle cmd' ]
-            html <- toHtml (input cmd') (styles @> cmd')
-            webview `setContent` html
+            html' <- toHtml (input cmd') (styles @> cmd')
+            webview `setContent` html'
 
+    window `on` keyPressEvent $ tryEvent $ do
+        "a" <- eventKeyName
+        liftIO $ do
+            cmd' <- modifyMVar status $ \cmd -> do
+                let cmd' = cmd `prevStyleFrom` styles 
+                return (cmd', cmd')
+            window `set` [ windowTitle := makeTitle cmd' ]
+            html' <- toHtml (input cmd') (styles @> cmd')
+            webview `setContent` html'
+    
     window `on` keyPressEvent $ tryEvent $ do
         "o" <- eventKeyName
         liftIO $ do
-            dialog <- openDialogNew window
-            widgetShow dialog
             
+            dialog <- openDialogNew window
+            filter <- fileFilterNew
+            fileFilterAddMimeType filter ("text/plain" :: String)
+            fileChooserAddFilter dialog filter
+            widgetShow dialog
             dialog `whenReturnFilename` \path -> do
                 
                 putStrLn $ "Opening file from " ++ path
@@ -155,21 +177,29 @@ runShow cmd styles = do
                     let cmd' = setInputFile cmd path
                     return (cmd', cmd')
                 window `set` [ windowTitle := makeTitle cmd' ]
-                html <- toHtml (input cmd') (styles @> cmd')
-                webview `setContent` html
+                html' <- toHtml path (styles @> cmd)  
+                webview `setContent` html'
             
             widgetDestroy dialog
 
     window `on` keyPressEvent $ tryEvent $ do
         "w" <- eventKeyName
         liftIO $ do
+            
             dialog <- saveDialogNew window
             widgetShow dialog
             dialog `whenReturnFilename` \path -> do
-                putStrLn $ "Saving html file to " ++ path
+                
                 cmd' <- readMVar status
-                html <- toHtml (input cmd') (styles @> cmd')
-                writeFile path (renderHtml html) 
+                html' <- toHtml (input cmd') (styles @> cmd')
+                
+                let path' = if hasExtension path
+                            then path
+                            else path <.> "html"
+                
+                putStrLn $ "Saving html file to " ++ path'
+                writeFile path' (renderHtml html') 
+            
             widgetDestroy dialog
    
     

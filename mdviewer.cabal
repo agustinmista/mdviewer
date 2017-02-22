@@ -41,7 +41,6 @@ executable mdviewer
                     , markdown
                     , blaze-html
                     , blaze-markup
-                    , random
 
   default-language:    Haskell2010
 
