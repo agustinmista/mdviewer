@@ -53,7 +53,8 @@ dispatcher styles cmd = do
 
 sanitizeStyle :: Command -> Styles -> IO (Command, Styles) 
 sanitizeStyle cmd@(style -> Nothing) styles = return (cmd, styles)
-sanitizeStyle cmd@(style -> Just st) styles = if st `member` styles 
+sanitizeStyle cmd@(style -> Just st) styles = 
+    if st `member` styles 
     then do
         putStrLn $ "Using built-in style: " ++ st
         return (cmd, styles)

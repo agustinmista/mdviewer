@@ -1,8 +1,15 @@
 {-# LANGUAGE ViewPatterns #-}
 {-# LANGUAGE OverloadedStrings #-}
+
 module Show (runShow) where
 
 import Prelude hiding (writeFile)
+
+import Data.Maybe
+import Data.List (elemIndex)
+
+import System.FilePath
+import System.Exit
 
 import Control.Exception
 import Control.Concurrent
@@ -13,16 +20,8 @@ import Control.Monad.IO.Class
 import Graphics.UI.Gtk 
 import Graphics.UI.Gtk.WebKit.WebView
 import Graphics.UI.Gtk.Windows.Window
-import System.Glib.UTFString
-import System.FilePath
-import System.Exit
 
 import Text.Pandoc.UTF8 (writeFile)
-
-import Data.Maybe
-import Data.List (elemIndex)
-import Data.Text.Lazy hiding (length, map)
-import Text.Blaze.Html (Html)
 
 import Types
 import HtmlBuilder
@@ -123,7 +122,8 @@ runShow cmd styles = do
     scrolled `set` [ containerChild := webview ]
     
     result <- renderContents (input cmd) (styles @> cmd)
-    maybe (abortDialog window) (setContent webview) result
+    maybe (invalidFileDialog window (input cmd) >> exitFailure) 
+          (setContent webview) result
 
     -- Handle events
     window `on` deleteEvent $ liftIO mainQuit >> return False
