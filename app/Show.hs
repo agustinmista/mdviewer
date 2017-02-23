@@ -22,7 +22,6 @@ import Data.List (elemIndex)
 import Data.Text.Lazy hiding (length, map)
 import Data.Text.Lazy.IO (writeFile)
 import Text.Blaze.Html (Html)
-import Text.Blaze.Html.Renderer.Text
 
 import Types
 import HtmlBuilder
@@ -46,9 +45,9 @@ setInputFile :: Command -> FilePath -> Command
 setInputFile cmd path = cmd { input = path } 
 
 
-setContent :: WebView -> Html -> IO ()
+setContent :: WebView -> Text -> IO ()
 setContent webview html = webViewLoadString webview contents Nothing baseUri
-    where contents = toStrict (renderHtml html)
+    where contents = toStrict html
           baseUri  = toStrict (pack "")
 
 
@@ -83,11 +82,27 @@ whenReturnFilename dialog action = do
         _ -> return ()
 
 
+abortDialog :: Window ->  IO ()
+abortDialog window = do 
+    dialog <- messageDialogNew (Just window) [] MessageError ButtonsOk 
+                ("An internal error happened. Aborting" :: String)
+    _ <- dialogRun dialog
+    widgetDestroy dialog    
+    exitFailure
+
+invalidFileDialog :: Window -> String -> IO ()
+invalidFileDialog window path = do
+    dialog <- messageDialogNew (Just window) [] MessageError ButtonsOk 
+                ("Unable to load " ++ path)
+    _ <- dialogRun dialog
+    widgetDestroy dialog    
+
+
 runShow :: Command -> Styles -> IO ()
 runShow cmd styles = do
     
-    -- Create an "global" state using that keeps the style and
-    -- the current file displayed between different events handles
+    -- Create an "global" state that keeps the style and the current file
+    -- displayed between different events handles
     status <- newMVar cmd
 
     -- Initialize the GUI
@@ -108,61 +123,69 @@ runShow cmd styles = do
 
     scrolled `set` [ containerChild := webview ]
     
-    html <- toHtml (input cmd) (styles @> cmd)
-    webview `setContent` html
+    result <- renderContents (input cmd) (styles @> cmd)
+    maybe (abortDialog window) (setContent webview) result
 
     -- Handle events
     window `on` deleteEvent $ liftIO mainQuit >> return False
 
     window `on` keyPressEvent $ tryEvent $ do
-        "q" <- eventKeyName
-        liftIO $ mainQuit >> exitSuccess
-    
-    window `on` keyPressEvent $ tryEvent $ do
         "F11" <- eventKeyName
         liftIO $ do 
             dec <- window `get` windowDecorated
             window `set` [ windowDecorated := not dec ]
+    
+    window `on` keyPressEvent $ tryEvent $ do
+        "q" <- eventKeyName
+        liftIO $ mainQuit >> exitSuccess
 
     window `on` keyPressEvent $ tryEvent $ do
         "r" <- eventKeyName
         liftIO $ do 
             cmd' <- readMVar status 
-            html' <- toHtml (input cmd') (styles @> cmd')
-            webview `setContent` html'
+            result <- renderContents (input cmd') (styles @> cmd')
+            maybe (abortDialog window) (setContent webview) result
    
     window `on` keyPressEvent $ tryEvent $ do
         "z" <- eventKeyName
-        liftIO $ ifM (webViewCanGoBack webview) 
-            (webViewGoBack webview)
-            (webview `setContent` html)
+        liftIO $ do 
+            canGoBack <- webViewCanGoBack webview
+            if canGoBack 
+                then webViewGoBack webview 
+                else do
+                    cmd' <- readMVar status 
+                    result <- renderContents (input cmd') (styles @> cmd')
+                    maybe (abortDialog window) (setContent webview) result
 
     window `on` keyPressEvent $ tryEvent $ do
         "x" <- eventKeyName
-        liftIO $ whenM (webViewCanGoForward webview) (webViewGoForward webview)
+        liftIO $ do 
+            canGoForward <- webViewCanGoForward webview
+            when (canGoForward) (webViewGoForward webview)
+
 
     window `on` keyPressEvent $ tryEvent $ do
-        "s" <- eventKeyName
+        "n" <- eventKeyName
         liftIO $ do
             cmd' <- modifyMVar status $ \cmd -> do
                 let cmd' = cmd `nextStyleFrom` styles 
                 return (cmd', cmd')
+            result <- renderContents (input cmd') (styles @> cmd')
+            maybe (abortDialog window) (setContent webview) result
             window `set` [ windowTitle := makeTitle cmd' ]
-            html' <- toHtml (input cmd') (styles @> cmd')
-            webview `setContent` html'
 
     window `on` keyPressEvent $ tryEvent $ do
-        "a" <- eventKeyName
+        "N" <- eventKeyName
         liftIO $ do
             cmd' <- modifyMVar status $ \cmd -> do
                 let cmd' = cmd `prevStyleFrom` styles 
                 return (cmd', cmd')
+            result <- renderContents (input cmd') (styles @> cmd')
+            maybe (abortDialog window) (setContent webview) result
             window `set` [ windowTitle := makeTitle cmd' ]
-            html' <- toHtml (input cmd') (styles @> cmd')
-            webview `setContent` html'
-    
+   
     window `on` keyPressEvent $ tryEvent $ do
-        "o" <- eventKeyName
+        "e" <- eventKeyName
         liftIO $ do
             
             dialog <- openDialogNew window
@@ -176,9 +199,12 @@ runShow cmd styles = do
                 cmd' <- modifyMVar status $ \cmd -> do
                     let cmd' = setInputFile cmd path
                     return (cmd', cmd')
-                window `set` [ windowTitle := makeTitle cmd' ]
-                html' <- toHtml path (styles @> cmd)  
-                webview `setContent` html'
+                result <- renderContents (input cmd') (styles @> cmd')
+                case result of 
+                    Nothing -> invalidFileDialog window path 
+                    Just html' -> do 
+                        webview `setContent` html'
+                        window `set` [ windowTitle := makeTitle cmd' ]
             
             widgetDestroy dialog
 
@@ -191,14 +217,16 @@ runShow cmd styles = do
             dialog `whenReturnFilename` \path -> do
                 
                 cmd' <- readMVar status
-                html' <- toHtml (input cmd') (styles @> cmd')
+                result <- renderContents (input cmd') (styles @> cmd')
+                maybe (abortDialog window) (\html' -> do
                 
-                let path' = if hasExtension path
-                            then path
-                            else path <.> "html"
+                    let path' = if hasExtension path
+                                then path
+                                else path <.> "html"
                 
-                putStrLn $ "Saving html file to " ++ path'
-                writeFile path' (renderHtml html') 
+                    putStrLn $ "Saving html file to " ++ path'
+                    writeFile path' html' 
+                    ) result
             
             widgetDestroy dialog
    

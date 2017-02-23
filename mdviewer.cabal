@@ -41,6 +41,7 @@ executable mdviewer
                     , markdown
                     , blaze-html
                     , blaze-markup
+                    , deepseq
 
   default-language:    Haskell2010
 

@@ -7,16 +7,22 @@ import Text.Blaze.Html.Renderer.Text
 import Data.Text.Lazy
 import Data.Text.Lazy.IO
 import System.FilePath
+import System.Exit
 
 import Types
 import HtmlBuilder
 
+
+errorMessage :: IO ()
+errorMessage = die "ABORTING!"
+
 runConvert :: Command -> Styles ->  IO ()
 runConvert cmd styles = do
     
-    html <- toHtml (input cmd) (styles @> cmd)
-    
-    let output | usesOutput cmd = getOutput cmd
-               | otherwise      = input cmd -<.> "html"
-
-    writeFile output (renderHtml html) 
+    result <- renderContents (input cmd) (styles @> cmd)
+    case result of
+        Nothing -> errorMessage
+        Just html -> do
+            writeFile output html 
+                where output | usesOutput cmd = getOutput cmd
+                             | otherwise      = input cmd -<.> "html"

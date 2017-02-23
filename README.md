@@ -3,7 +3,7 @@
 `mdviewer` is a minimalistic GTK+ Markdown viewer/converter supporting CSS
 stylesheets embedding.
 
-![](http://i.imgur.com/X7O6OCW.gif)
+# ![](http://i.imgur.com/X7O6OCW.gif)
 
 ----------
 
