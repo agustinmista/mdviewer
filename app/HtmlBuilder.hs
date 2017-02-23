@@ -2,50 +2,56 @@
 
 module HtmlBuilder where
 
-import Prelude hiding (readFile, writeFile, head)
-
-import Data.String
-import Data.Text.Lazy hiding (head)
-import Data.Text.Lazy.IO hiding (putStrLn)
+import Prelude hiding (putStrLn, readFile, writeFile, head)
 
 import Control.Exception
 import Control.DeepSeq
 
-import Text.Markdown
 import Text.Blaze.Html5
 import Text.Blaze.Html5.Attributes (charset, rel, type_, href)
-import Text.Blaze.Html.Renderer.Text
+import Text.Blaze.Html.Renderer.String
+
+import Text.Pandoc.Readers.Markdown
+import Text.Pandoc.Writers.HTML
+import Text.Pandoc.Options
+import Text.Pandoc.UTF8
 
 
-returnNothing :: SomeException -> IO (Maybe Text)
+returnNothing :: SomeException -> IO (Maybe String)
 returnNothing e = do
-    putStrLn $ "renderContents: exception raised\n" ++ show e
+    putStrLn $ "renderContents: exception raised\n" ++ displayException e
     return Nothing
 
-renderContents :: FilePath -> Maybe FilePath -> IO (Maybe Text)
+
+renderContents :: FilePath -> Maybe FilePath -> IO (Maybe String)
 renderContents input style = handle returnNothing $ do
     result <- case style of
-        Nothing  -> toHtmlPure input 
-        Just css -> toHtmlWithCss css input
-    return $!! Just (renderHtml result)    
+        Nothing  -> Just <$> toPureHtmlString input
+        Just css -> Just <$> toStylishedHtmlString css input
+    return $!! result
 
-toHtmlPure :: FilePath -> IO Html
-toHtmlPure input = pureHtml <$> readFile input
 
-pureHtml :: Text -> Html
-pureHtml md = do
-    docTypeHtml $ do
-        head $ meta ! charset "UTF-8" 
-        body $ markdown def md
+toPureHtmlString :: FilePath -> IO String
+toPureHtmlString input = pureHtmlString <$> readFile input
 
-toHtmlWithCss :: FilePath -> FilePath -> IO Html
-toHtmlWithCss css input = stylishedHtml <$> readFile css <*> readFile input 
+pureHtmlString :: String -> String
+pureHtmlString contents = either throw buildHtml (readMarkdown def contents)
+    where buildHtml pandoc = renderHtml $ do
+            docTypeHtml $ do
+                head (meta ! charset "UTF-8") 
+                body (writeHtml def pandoc)
 
-stylishedHtml :: Text -> Text -> Html
-stylishedHtml css contents = do
-    docTypeHtml $ do
-        head $ do
-            meta  ! charset "UTF-8" 
-            style ! type_ "text/css"
-                  $ text (toStrict css)
-        body $ markdown def contents
+
+toStylishedHtmlString :: FilePath -> FilePath -> IO String
+toStylishedHtmlString css input = stylishedHtmlString <$> readFile css <*> readFile input
+    
+stylishedHtmlString :: String -> String -> String
+stylishedHtmlString css contents = either throw (buildHtml css) (readMarkdown def contents)
+    where buildHtml css pandoc = renderHtml $ do
+            docTypeHtml $ do
+                head $ do
+                    meta  ! charset "UTF-8" 
+                    style ! type_ "text/css"
+                          $ string css
+            body (writeHtml def pandoc)
+

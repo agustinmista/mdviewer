@@ -2,10 +2,8 @@ module Convert (runConvert) where
 
 import Prelude hiding (writeFile)
 
-import Text.Blaze.Html.Renderer.Text
+import Text.Pandoc.UTF8
 
-import Data.Text.Lazy
-import Data.Text.Lazy.IO
 import System.FilePath
 import System.Exit
 

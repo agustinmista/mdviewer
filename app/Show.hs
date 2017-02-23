@@ -17,10 +17,11 @@ import System.Glib.UTFString
 import System.FilePath
 import System.Exit
 
+import Text.Pandoc.UTF8 (writeFile)
+
 import Data.Maybe
 import Data.List (elemIndex)
 import Data.Text.Lazy hiding (length, map)
-import Data.Text.Lazy.IO (writeFile)
 import Text.Blaze.Html (Html)
 
 import Types
@@ -45,10 +46,8 @@ setInputFile :: Command -> FilePath -> Command
 setInputFile cmd path = cmd { input = path } 
 
 
-setContent :: WebView -> Text -> IO ()
-setContent webview html = webViewLoadString webview contents Nothing baseUri
-    where contents = toStrict html
-          baseUri  = toStrict (pack "")
+setContent :: WebView -> String -> IO ()
+setContent webview html = webViewLoadString webview html Nothing ""
 
 
 makeTitle :: Command -> String
