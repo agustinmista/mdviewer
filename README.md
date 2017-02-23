@@ -1,4 +1,10 @@
 # mdviewer
+
+`mdviewer` is a minimalistic GTK+ Markdown viewer/converter supporting CSS
+stylesheets embedding.
+
+![](http://i.imgur.com/X7O6OCW.gif)
+
 ----------
 
 ## Installation
@@ -51,6 +57,7 @@ optional arguments:
 * __w__ - saves the current file with the current style
 * __q__ - exits `mdviewer`
 
+
 ### __convert__
 > Converts a Markdown file into an Html file (posibly) embedding a CSS style
 
@@ -71,7 +78,7 @@ optional arguments:
 ```
 
 
-### __list__: lists installed CSS styles
+### __list__
 > List the installed Css styles
 
 ```
