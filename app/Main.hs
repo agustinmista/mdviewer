@@ -20,6 +20,8 @@ import Convert
 import List
 import Paths
 
+aboutStyle = "markdown-alt"
+
 
 getStyleName :: FilePath -> String
 getStyleName = map toLower . takeBaseName
@@ -49,9 +51,9 @@ dispatcher styles cmd = do
     (cmd', styles') <- sanitizeStyle cmd styles 
     case cmd' of
         Convert {} -> runConvert cmd' styles'
-        Show {input = "" } -> do
+        Show {input = ""} -> do
                 about <- getAboutFile
-                runShow (cmd'{input = about}) styles'
+                runShow (cmd'{input = about, style = Just aboutStyle}) styles'
         Show {} -> runShow cmd' styles'        
 
 

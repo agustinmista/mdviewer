@@ -115,16 +115,16 @@ runShow cmd styles = do
     window `set` [ windowTitle          := makeTitle cmd
                  , windowResizable      := True
                  , windowWindowPosition := WinPosCenter
-                 , windowDefaultWidth   := 1024
-                 , windowDefaultHeight  := 576
+                 , windowDefaultWidth   := 800
+                 , windowDefaultHeight  := 600
                  , containerChild       := scrolled ]
-    windowMaximize window
 
     scrolled `set` [ containerChild := webview ]
     
     result <- renderContents (input cmd) (styles @> cmd)
     maybe (invalidFileDialog window (input cmd) >> exitFailure) 
           (setContent webview) result
+
 
     -- Handle events
     window `on` deleteEvent $ liftIO mainQuit >> return False
