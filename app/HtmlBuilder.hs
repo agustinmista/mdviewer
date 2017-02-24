@@ -25,10 +25,10 @@ returnNothing e = do
 
 renderContents :: FilePath -> Maybe FilePath -> IO (Maybe String)
 renderContents input style = handle returnNothing $ do
-    result <- case style of
-        Nothing  -> Just <$> toPureHtmlString input
-        Just css -> Just <$> toStylishedHtmlString css input
-    return $!! result
+    html <- case style of
+        Nothing  -> toPureHtmlString input
+        Just css -> toStylishedHtmlString css input
+    return $!! Just html
 
 
 toPureHtmlString :: FilePath -> IO String
