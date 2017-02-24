@@ -48,15 +48,17 @@ optional arguments:
 ```
 
 #### Suported show keybindings
-* __r__ - reload the file
-* __s__ - set next style
-* __a__ - set previous style
-* __z__ - go to previous page
-* __x__ - go to following page
-* __o__ - opens another file with the current style
-* __w__ - saves the current file with the current style
-* __q__ - exits `mdviewer`
 
+| key |  description          |
+|:---:|:----------------------|
+| `e` | open file             |
+| `w` | save as Html          |
+| `r` | reload preview        |
+| `n` | set next style        |
+| `N` | set previous style    |
+| `z` | go to previous page   |
+| `x` | go to following page  |
+| `q` | quit                  |
 
 ### __convert__
 > Converts a Markdown file into an Html file (posibly) embedding a CSS style
