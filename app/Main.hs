@@ -48,8 +48,12 @@ dispatcher styles List = runList styles
 dispatcher styles cmd = do
     (cmd', styles') <- sanitizeStyle cmd styles 
     case cmd' of
-        Show {} -> runShow cmd' styles'
         Convert {} -> runConvert cmd' styles'
+        Show {input = "" } -> do
+                about <- getAboutFile
+                runShow (cmd'{input = about}) styles'
+        Show {} -> runShow cmd' styles'        
+
 
 sanitizeStyle :: Command -> Styles -> IO (Command, Styles) 
 sanitizeStyle cmd@(style -> Nothing) styles = return (cmd, styles)

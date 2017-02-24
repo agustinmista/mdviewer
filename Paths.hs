@@ -5,11 +5,16 @@ import System.FilePath
 
 progName = "mdviewer"
 
-stylesRelPath = "styles"
+aboutFile = "about.md"
+
 libRelPath = "lib"
+stylesRelPath = "styles"
 
 getStylesSourcePath :: IO FilePath
 getStylesSourcePath = makeAbsolute $ libRelPath </> stylesRelPath
+
+getAboutSourcePath :: IO FilePath
+getAboutSourcePath = makeAbsolute $ libRelPath </> aboutFile
 
 getDataPath :: IO FilePath
 getDataPath = getXdgDirectory XdgData progName
@@ -22,3 +27,6 @@ getCachePath = getXdgDirectory XdgCache progName
 
 getStylesPath :: IO FilePath
 getStylesPath = (</> stylesRelPath) <$> getDataPath
+
+getAboutFile :: IO FilePath
+getAboutFile = (</> aboutFile) <$> getDataPath

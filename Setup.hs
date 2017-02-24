@@ -12,19 +12,27 @@ copyStyle (source, target) = do
     putStrLn $ "Copying from " ++ source ++ " to " ++ target
     copyFile source target
 
-copyStyles _ _ _ _ = do
-    sourcePath <- getStylesSourcePath
-    targetPath <- getStylesPath
-   
-    createDirectoryIfMissing True targetPath
+copyData _ _ _ _ = do
     
+    -- about page
+    dataPath <- getDataPath
+    aboutSource <- getAboutSourcePath
+    createDirectoryIfMissing True dataPath
     
-    styles <- listDirectory sourcePath
-    let paths = map (\s -> (sourcePath </> s, targetPath </> s)) styles
-
+    let aboutTarget = dataPath </> aboutFile
+    putStrLn $ "Copying from " ++ aboutSource ++ " to " ++ aboutTarget 
+    copyFile aboutSource aboutTarget 
+    
+    -- styles
+    stylesSource <- getStylesSourcePath
+    stylesTarget <- getStylesPath
+    createDirectoryIfMissing True stylesTarget
+    
+    styles <- listDirectory stylesSource
+    let paths = map (\s -> (stylesSource </> s, stylesTarget </> s)) styles
     mapM_ copyStyle paths
-    
 
-copyStylesHooks = simpleUserHooks { postCopy = copyStyles }
 
-main = defaultMainWithHooks copyStylesHooks
+copyDataHooks = simpleUserHooks { postCopy = copyData }
+
+main = defaultMainWithHooks copyDataHooks

@@ -8,6 +8,7 @@ import System.Console.ArgParser.QuickParams
 
 import Types
 
+
 -- | Required to read Maybe parameters
 instance RawRead a => RawRead (Maybe a) where
     rawParse s = do 
@@ -34,7 +35,7 @@ parseSubcommand = mkSubParser
 -- | Show subcommand parser
 showParser :: ParserSpec Command
 showParser = Show
-    `parsedBy` reqPos          "input"  `Descr` "Markdown input file"
+    `parsedBy` optPos  ""      "input"  `Descr` "Markdown input file"
     `andBy`    optFlag Nothing "style"  `Descr` "Css style to embed"
 
 -- | Convert subcommand parser

@@ -116,8 +116,9 @@ runShow cmd styles = do
                  , windowResizable      := True
                  , windowWindowPosition := WinPosCenter
                  , windowDefaultWidth   := 1024
-                 , windowDefaultHeight  := 768
+                 , windowDefaultHeight  := 576
                  , containerChild       := scrolled ]
+    windowMaximize window
 
     scrolled `set` [ containerChild := webview ]
     
