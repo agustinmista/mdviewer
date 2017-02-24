@@ -5,13 +5,6 @@ stylesheets embedding.
 
 # ![](http://i.imgur.com/X7O6OCW.gif)
 
-
-| Col1 | Col2 | Col3 |
-|:-----|:----:|-----:|
-| aaaa | bbbb | cccc |
-| dddd | eeee | ffff |
-
-
 ----------
 
 ## Installation
