@@ -1,8 +1,9 @@
 # mdviewer
 
 __mdviewer__ is a minimalistic GTK+ Markdown viewer/converter written in
-Haskell.  It supports using CSS stylesheets and exporting to Html embedding
-them into a single autocontained Html file. 
+Haskell. It supports using Css stylesheets both from a built-in styles repository
+or from user provided Css files. It is also possible to export files
+to Html embedding the selected style into a single self-contained file. 
 
 <center><img src="http://i.imgur.com/X7O6OCW.gif"></center>
 
@@ -29,14 +30,14 @@ stack install gtk2hs-buildtools
 stack install
 ```
 
-The installation will usually copy the executable to `$HOME/.local/bin`, so is
-important that you have append it your PATH. Other data files such as the
+The installation will usually copy the executable to `$HOME/.local/bin`, so it is
+important that you have append it to your PATH. Other data files such as the
 styles repository are copied into your Xdg data dir, this is usualy
-`$HOME/.local/share/mdviever`
+`$HOME/.local/share/mdviever`.
 
 ## Usage
 
-__mdviewer__ currently supports three subcommands
+__mdviewer__ currently supports three subcommands:
 
 ### _show_
 
@@ -67,18 +68,18 @@ file is shown.
 `mdviewer convert input [-o  OUTPUT] [-s  STYLE]`
 
 This subcommand converts an Markdown file into a Html file which optionally
-embeds an CSS stylesheet. If no output file is specified then the output is
-saved to input.html.
+embeds an Css stylesheet. If no output file is specified, then the output is
+saved to _input_.html.
 
 ### _list_
 
 `mdviewer list`
 
-This subcommand lists the CSS stylesheets currently available at the styles
-repository, you can choose any of them using the `-s/--style` flag and the
+This subcommand lists the Css stylesheets currently available at the styles
+repository; you can choose any of them using the `-s/--style` flag and the
 style name when calling to `show/convert` subcommands. If you want to use an
-external CSS stylesheet instead, just use the `-s/--style` flag providing the
-path to it and __mdviewer__ will add it to the built-in stylesheets repository
+external Css stylesheet instead, just use the `-s/--style` flag providing the
+path to it and __mdviewer__ will add it to the built-in styles repository
 for future usage automatically. 
 
 ```
