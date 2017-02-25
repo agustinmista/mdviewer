@@ -7,14 +7,14 @@ progName = "mdviewer"
 
 aboutFile = "about.md"
 
-libRelPath = "lib"
+dataRelPath = "data"
 stylesRelPath = "styles"
 
 getStylesSourcePath :: IO FilePath
-getStylesSourcePath = makeAbsolute $ libRelPath </> stylesRelPath
+getStylesSourcePath = makeAbsolute $ dataRelPath </> stylesRelPath
 
 getAboutSourcePath :: IO FilePath
-getAboutSourcePath = makeAbsolute $ libRelPath </> aboutFile
+getAboutSourcePath = makeAbsolute $ dataRelPath </> aboutFile
 
 getDataPath :: IO FilePath
 getDataPath = getXdgDirectory XdgData progName

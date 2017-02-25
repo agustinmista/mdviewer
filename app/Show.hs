@@ -115,8 +115,8 @@ runShow cmd styles = do
     window `set` [ windowTitle          := makeTitle cmd
                  , windowResizable      := True
                  , windowWindowPosition := WinPosCenter
-                 , windowDefaultWidth   := 800
-                 , windowDefaultHeight  := 600
+                 , windowDefaultWidth   := 640
+                 , windowDefaultHeight  := 640
                  , containerChild       := scrolled ]
 
     scrolled `set` [ containerChild := webview ]
@@ -125,7 +125,7 @@ runShow cmd styles = do
     maybe (invalidFileDialog window (input cmd) >> exitFailure) 
           (setContent webview) result
 
-
+    
     -- Handle events
     window `on` deleteEvent $ liftIO mainQuit >> return False
 
@@ -146,6 +146,23 @@ runShow cmd styles = do
             result <- renderContents (input cmd') (styles @> cmd')
             maybe (abortDialog window) (setContent webview) result
    
+    window `on` keyPressEvent $ tryEvent $ do
+        "g" <- eventKeyName
+        liftIO $ do 
+            adj <- scrolledWindowGetVAdjustment scrolled
+            top <- adjustmentGetLower adj
+            adjustmentSetValue adj top
+            adjustmentValueChanged adj            
+    
+    window `on` keyPressEvent $ tryEvent $ do
+        "G" <- eventKeyName
+        liftIO $ do 
+            adj <- scrolledWindowGetVAdjustment scrolled
+            bottom <- adjustmentGetUpper adj
+            adjustmentSetValue adj bottom
+            adjustmentValueChanged adj            
+
+    
     window `on` keyPressEvent $ tryEvent $ do
         "z" <- eventKeyName
         liftIO $ do 
