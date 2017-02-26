@@ -6,7 +6,7 @@ module Show (runShow) where
 import Prelude hiding (writeFile)
 
 import Data.Maybe
-import Data.List (elemIndex)
+import Data.List (elemIndex, null)
 
 import System.FilePath
 import System.Exit
@@ -102,6 +102,8 @@ runShow cmd styles = do
     -- Create an "global" state that keeps the style and the current file
     -- displayed between different events handles
     status <- newMVar cmd
+    fullscreen <- newMVar False
+    lastPos <- newEmptyMVar
 
     -- Initialize the GUI
     void initGUI
@@ -111,7 +113,7 @@ runShow cmd styles = do
     scrolled <- scrolledWindowNew Nothing Nothing
     webview <- webViewNew
     
-    -- Set widgets attributes
+    -- Set widgets default attributes
     window `set` [ windowTitle          := makeTitle cmd
                  , windowResizable      := True
                  , windowWindowPosition := WinPosCenter
@@ -132,9 +134,15 @@ runShow cmd styles = do
     window `on` keyPressEvent $ tryEvent $ do
         "F11" <- eventKeyName
         liftIO $ do 
-            dec <- window `get` windowDecorated
-            window `set` [ windowDecorated := not dec ]
-    
+            isFullscreen <- readMVar fullscreen
+            if isFullscreen
+                then do
+                    modifyMVar_ fullscreen (return . not) 
+                    windowUnfullscreen window
+                else do
+                    modifyMVar_ fullscreen (return . not) 
+                    windowFullscreen window
+
     window `on` keyPressEvent $ tryEvent $ do
         "q" <- eventKeyName
         liftIO $ mainQuit >> exitSuccess
@@ -142,10 +150,28 @@ runShow cmd styles = do
     window `on` keyPressEvent $ tryEvent $ do
         "r" <- eventKeyName
         liftIO $ do 
+            
+            uri <- webViewGetUri webview
+            let isInputFile = maybe False (==[]) uri
+            
+            when isInputFile $ do
+                adj <- scrolledWindowGetVAdjustment scrolled
+                pos <- adjustmentGetValue adj 
+                putMVar lastPos pos 
+                
+
             cmd' <- readMVar status 
             result <- renderContents (input cmd') (styles @> cmd')
             maybe (abortDialog window) (setContent webview) result
-   
+    
+    webview `after` loadFinished $ \_ ->  do
+        liftIO $ do
+            pos <- tryTakeMVar lastPos
+            when (isJust pos) $ do 
+                adj <- scrolledWindowGetVAdjustment scrolled
+                adjustmentSetValue adj (fromJust pos)
+                adjustmentValueChanged adj            
+
     window `on` keyPressEvent $ tryEvent $ do
         "g" <- eventKeyName
         liftIO $ do 

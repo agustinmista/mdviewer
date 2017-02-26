@@ -1,8 +1,8 @@
 # mdviewer
 
 __mdviewer__ is a minimalistic GTK+ Markdown viewer/converter written in
-Haskell. It supports using Css stylesheets both from a built-in styles repository
-or from user provided Css files. It is also possible to export files
+Haskell. It supports using Css stylesheets both from a built-in styles
+repository or from user provided Css files. It is also possible to export files
 to Html embedding the selected style into a single self-contained file. 
 
 <center><img src="http://i.imgur.com/X7O6OCW.gif"></center>
@@ -30,9 +30,9 @@ stack install gtk2hs-buildtools
 stack install
 ```
 
-The installation will usually copy the executable to `$HOME/.local/bin`, so it is
-important that you have append it to your PATH. Other data files such as the
-styles repository are copied into your Xdg data dir, this is usualy
+The installation will usually copy the executable to `$HOME/.local/bin`, so it
+is important that you have appended it to your PATH. Other data files such as
+the styles repository are copied into your Xdg data folder. This is usually
 `$HOME/.local/share/mdviever`.
 
 ## Usage
@@ -44,11 +44,14 @@ __mdviewer__ currently supports three subcommands:
 `mdviewer show [input] [-s  STYLE]` 
 
 This subcommand launches an interactive WebKit based window where you can use
-the supported key-bindings to open files, change styles, navigate links and so
-on. If you run `mdviewer show` without specifiying an input file, a welcome
-file is shown.
+the supported key-bindings to open files, change styles, navigate following
+links and so on. If you run `mdviewer show` without specifying an input file,
+a welcome file is shown.
 
-#### Suported interactive key-bindings
+#### Interactive controls
+
+The current key-bindings mapping intends to provide a _vim_-like user
+experience:
 
 | key |  description          |
 |:---:|:----------------------|
@@ -67,7 +70,7 @@ file is shown.
 
 `mdviewer convert input [-o  OUTPUT] [-s  STYLE]`
 
-This subcommand converts an Markdown file into a Html file which optionally
+This subcommand converts an Markdown file into an Html file which optionally
 embeds an Css stylesheet. If no output file is specified, then the output is
 saved to _input_.html.
 
@@ -76,10 +79,10 @@ saved to _input_.html.
 `mdviewer list`
 
 This subcommand lists the Css stylesheets currently available at the styles
-repository; you can choose any of them using the `-s/--style` flag and the
-style name when calling to `show/convert` subcommands. If you want to use an
-external Css stylesheet instead, just use the `-s/--style` flag providing the
-path to it and __mdviewer__ will add it to the built-in styles repository
+repository; you can choose any of them by using the `-s/--style` flag followed
+by a style name when calling to `show/convert` subcommands. If you want to use
+an external Css stylesheet instead, just use the `-s/--style` flag providing
+the path to it and __mdviewer__ will add it to the built-in styles repository
 for future usage automatically. 
 
 ```
@@ -94,7 +97,7 @@ Available styles:
   * markdown
   * ...
 ``` 
--------------------------------------------------------------------------------
 
+-------------------------------------------------------------------------------
 Please, if you find this software useful don't doubt to give any feedback. PRs
 are welcome!

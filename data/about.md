@@ -1,12 +1,19 @@
-# mdviewer
+# Welcome to mdviewer
 
-__mdviewer__ is a minimalistic Markdown files viewer/converter with CSS
-stylesheets embedding support.  
+This is a blank page shown when you don't specify an input file. Try pressing
+`e` to open an existing file! 
 
-This is a blank page shown when you don't specify an input file. Try pressing 
-`e` to open an existing file!
+### New to Markdown? 
+Take a look at:
 
-## Interactive controls
+*  John Gruber's Markdown [original
+   implementation](https://daringfireball.net/projects/markdown/syntax) for the
+   basics.
+
+*  [Extended syntax](http://pandoc.org/MANUAL.html#pandocs-markdown) supported
+   by pandoc (__mdviewer__'s heart).
+
+### Interactive controls
 
 | key | / description         |
 |:---:|:----------------------|
@@ -23,6 +30,6 @@ This is a blank page shown when you don't specify an input file. Try pressing
 
 
 <span style="position:fixed;bottom:0;">
-If you have any comments about __mdviewer__, please go to the 
+If you want to give any comments about __mdviewer__, go to the
 [project page](http://github.com/agustinmista/mdviewer).
 </span>

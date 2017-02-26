@@ -20,7 +20,7 @@ import Convert
 import List
 import Paths
 
-aboutStyle = "markdown-alt"
+aboutStyle = "markdown"
 
 
 getStyleName :: FilePath -> String
