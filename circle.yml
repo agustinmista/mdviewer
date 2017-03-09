@@ -1,0 +1,33 @@
+general:
+  branches:
+    only:
+      - master 
+      
+machine:
+  environment:
+    PATH: $PATH:/home/ubuntu/.local/bin
+
+dependencies:
+  cache_directories:
+    - "~/.stack"
+    - "~/.cabal"
+  pre:
+    - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 575159689BEFB442
+    - echo 'deb http://download.fpcomplete.com/ubuntu trusty main'|sudo tee /etc/apt/sources.list.d/fpco.list
+    - sudo apt-get update && sudo apt-get install stack -y
+    - sudo apt-get install libwebkitgtk-3.0-dev
+  override:
+    - stack setup
+    - stack install gtk2hs-buildtools
+    - rm -rf $(stack path --dist-dir) $(stack path --local-install-root)
+    - stack install 
+
+test:
+  override:
+    - mdviewer list > styles.txt 
+    - mdviewer convert README.md
+    - mkdir -p $CIRCLE_ARTIFACTS/report/
+    - cp styles.txt README.html $CIRCLE_ARTIFACTS/report/
+  post:
+    - mkdir -p $CIRCLE_ARTIFACTS/build/
+    - cp /home/ubuntu/.local/bin/mdviewer $CIRCLE_ARTIFACTS/build/mdviewer
