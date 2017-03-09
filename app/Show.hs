@@ -171,6 +171,24 @@ runShow cmd styles = do
                 adj <- scrolledWindowGetVAdjustment scrolled
                 adjustmentSetValue adj (fromJust pos)
                 adjustmentValueChanged adj            
+    
+    window `on` keyPressEvent $ tryEvent $ do
+        "j" <- eventKeyName
+        liftIO $ do 
+            adj <- scrolledWindowGetVAdjustment scrolled
+            ps <- adjustmentGetStepIncrement adj
+            pos <- adjustmentGetValue adj
+            adjustmentSetValue adj (pos + ps)
+            adjustmentValueChanged adj
+    
+    window `on` keyPressEvent $ tryEvent $ do
+        "k" <- eventKeyName
+        liftIO $ do 
+            adj <- scrolledWindowGetVAdjustment scrolled
+            ps <- adjustmentGetStepIncrement adj
+            pos <- adjustmentGetValue adj
+            adjustmentSetValue adj (pos - ps)
+            adjustmentValueChanged adj
 
     window `on` keyPressEvent $ tryEvent $ do
         "g" <- eventKeyName
