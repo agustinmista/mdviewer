@@ -15,12 +15,11 @@ using Stack, or downloading a precompiled binary provided by CircleCI
 
 ### Prerequisites
 
-* [The Haskell Tool Stack](https://www.haskellstack.org/) 
 * WebKit GTK+ development library:
    + On Ubuntu/Debian: [`libwebkitgtk-3.0-dev`](http://packages.ubuntu.com/precise/libwebkitgtk-3.0-dev)
    + On Arch: [`webkitgtk`](https://www.archlinux.org/packages/extra/x86_64/webkitgtk/)
 
-### Compiling from source
+### Compiling from source using [Stack](https://www.haskellstack.org/)
 ```
 git clone https://github.com/agustinmista/mdviewer
 cd mdviever
