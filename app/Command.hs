@@ -20,7 +20,7 @@ instance RawRead a => RawRead (Maybe a) where
 parseCommand :: IO (CmdLnInterface Command)
 parseCommand = setVersion "1.0.0"
            <$> setDescr "A basic Markdown viewer/converter with Css support"
-           <$> setEpilog "Project page: github.com/agustinmista/mdviewer"             
+           <$> setEpilog "Project page: https://github.com/agustinmista/mdviewer"             
            <$> parseSubcommand
 
 
