@@ -1,4 +1,5 @@
 # mdviewer
+[![CircleCI](https://circleci.com/gh/agustinmista/mdviewer.svg?style=svg)](https://circleci.com/gh/agustinmista/mdviewer)
 
 __mdviewer__ is a minimalistic GTK+ Markdown viewer/converter written in
 Haskell. It supports using Css stylesheets both from a built-in styles
@@ -9,8 +10,8 @@ to Html embedding the selected style into a single self-contained file.
 
 ## Installation
 
-At the time, the only way to install __mdviewer__ is compiling it from source
-using Stack.
+At the time, __mdviewer__ can be installed both compiling it from source
+using Stack, or downloading a precompiled binary provided by CircleCI
 
 ### Prerequisites
 
@@ -20,7 +21,6 @@ using Stack.
    + On Arch: [`webkitgtk`](https://www.archlinux.org/packages/extra/x86_64/webkitgtk/)
 
 ### Compiling from source
-
 ```
 git clone https://github.com/agustinmista/mdviewer
 cd mdviever
@@ -34,6 +34,21 @@ The installation will usually copy the executable to `$HOME/.local/bin`, so it
 is important that you have appended it to your PATH. Other data files such as
 the styles repository are copied into your Xdg data folder. This is usually
 `$HOME/.local/share/mdviever`.
+
+### Downloading a precompiled binary
+This process is automated by the `install.sh` bash script which downloads 
+a precompiled binary from the latest CircleCI build, and the data files from
+this GitHub repository using Subversion. Make sure you have installed _wget_
+and _svn_ before running the installer.
+
+```
+wget https://raw.githubusercontent.com/agustinmista/mdviewer/master/install.sh
+chmod +x install.sh
+./install.sh
+```
+
+This method will copy the executable to `$HOME/.local/bin` and the data files 
+to `$HOME/.local/share/mdviever`.
 
 ## Usage
 
@@ -70,7 +85,7 @@ experience:
 
 `mdviewer convert input [-o  OUTPUT] [-s  STYLE]`
 
-This subcommand converts an Markdown file into an Html file which optionally
+This subcommand converts a Markdown file into an Html file which optionally
 embeds an Css stylesheet. If no output file is specified, then the output is
 saved to _input_.html.
 
@@ -97,6 +112,12 @@ Available styles:
   * markdown
   * ...
 ``` 
+
+## Acknowledgments
+I would like to say thanks to some of the authors of the Css stylesheets built-in into
+__mdviewer__:
+* [John Otander](https://github.com/johnotander)
+* [Jason Milkins](https://github.com/jasonm23)
 
 -------------------------------------------------------------------------------
 Please, if you find this software useful don't doubt to give any feedback. PRs
