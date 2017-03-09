@@ -1,5 +1,0 @@
-sudo apt-get install libwebkitgtk-3.0-dev
-
-stack setup
-stack install gtk2hs-buildtools
-stack install 
