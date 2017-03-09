@@ -19,8 +19,8 @@ instance RawRead a => RawRead (Maybe a) where
 -- | Main parsing function
 parseCommand :: IO (CmdLnInterface Command)
 parseCommand = setVersion "1.0.0"
-           <$> setDescr "A basic Markdown viewer/converter with css support"
-           <$> setEpilog "Some epilog"             
+           <$> setDescr "A basic Markdown viewer/converter with Css support"
+           <$> setEpilog "Project page: github.com/agustinmista/mdviewer"             
            <$> parseSubcommand
 
 
@@ -35,15 +35,15 @@ parseSubcommand = mkSubParser
 -- | Show subcommand parser
 showParser :: ParserSpec Command
 showParser = Show
-    `parsedBy` optPos  ""      "input"  `Descr` "Markdown input file"
-    `andBy`    optFlag Nothing "style"  `Descr` "Css style to embed"
+    `parsedBy` optPos  ""      "input"  `Descr` "markdown input file"
+    `andBy`    optFlag Nothing "style"  `Descr` "css style to embed"
 
 -- | Convert subcommand parser
 convertParser :: ParserSpec Command 
 convertParser = Convert
-    `parsedBy` reqPos          "input"  `Descr` "Markdown input file"
-    `andBy`    optFlag Nothing "output" `Descr` "Output Html file"
-    `andBy`    optFlag Nothing "style"  `Descr` "Css style to embed"
+    `parsedBy` reqPos          "input"  `Descr` "markdown input file"
+    `andBy`    optFlag Nothing "output" `Descr` "output Html file"
+    `andBy`    optFlag Nothing "style"  `Descr` "css style to embed"
 
 -- | List subcommand parser
 listParser = pure List 
