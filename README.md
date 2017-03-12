@@ -117,6 +117,7 @@ I would like to say thanks to some of the authors of the Css stylesheets built-i
 __mdviewer__:
 * [John Otander](https://github.com/johnotander)
 * [Jason Milkins](https://github.com/jasonm23)
+* [Jocelyn Richard](https://github.com/nWODT-Cobalt)
 
 -------------------------------------------------------------------------------
 Please, if you find this software useful don't doubt to give any feedback. PRs
