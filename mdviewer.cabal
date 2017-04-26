@@ -1,13 +1,16 @@
 name:                 mdviewer
 version:              0.1.0.0
--- synopsis:
--- description:
-homepage:             https://github.com/githubuser/markdown#readme
+synopsis:             mdviewer is a minimalistic GTK+ Markdown viewer/converter written in Haskell. 
+description:          mdviewer is a minimalistic GTK+ Markdown viewer/converter written in Haskell. 
+                      It supports using Css stylesheets both from a built-in styles repository or 
+                      from user provided Css files. It is also possible to export files to Html 
+                      embedding the selected style into a single self-contained file.
+homepage:             https://github.com/agustinmista/mdviewer#readme
 license:              GPL-3
 license-file:         LICENSE
-author:               Author name here
-maintainer:           example@example.com
-copyright:            2017 Author name here
+author:               Agustin Mista
+maintainer:           mista.agustin@gmail.com
+copyright:            2017 Agustin Mista
 category:             Web
 extra-source-files:   README.md
 cabal-version:        >=1.10
@@ -47,4 +50,4 @@ executable mdviewer
 
 source-repository head
   type:     git
-  location: https://github.com/githubuser/markdown
+  location: https://github.com/agustinmista/mdviewer
