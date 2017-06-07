@@ -22,7 +22,7 @@ using Stack, or downloading a precompiled binary provided by CircleCI
 ### Compiling from source using [Stack](https://www.haskellstack.org/)
 ```
 git clone https://github.com/agustinmista/mdviewer
-cd mdviever
+cd mdviewer
 
 stack setup
 stack install gtk2hs-buildtools 
@@ -32,7 +32,7 @@ stack install
 The installation will usually copy the executable to `$HOME/.local/bin`, so it
 is important that you have appended it to your PATH. Other data files such as
 the styles repository are copied into your Xdg data folder. This is usually
-`$HOME/.local/share/mdviever`.
+`$HOME/.local/share/mdviewer`.
 
 ### Downloading a precompiled binary
 This process is automated by the `install.sh` bash script which downloads 
@@ -47,7 +47,7 @@ chmod +x install.sh
 ```
 
 This method will copy the executable to `$HOME/.local/bin` and the data files 
-to `$HOME/.local/share/mdviever`.
+to `$HOME/.local/share/mdviewer`.
 
 ## Usage
 
